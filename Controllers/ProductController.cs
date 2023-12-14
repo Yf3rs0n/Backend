@@ -21,6 +21,10 @@ namespace Backend.Controllers
             _productService = productService;
             _mapper = mapper;
         }
+        /// <summary>
+        /// Gets a list of all products.
+        /// </summary>
+        /// <returns>Returns a response with a list of ProductDTO or an error message.</returns>
         [HttpGet("all")]
         public async Task<IActionResult> Get()
         {
@@ -46,15 +50,18 @@ namespace Backend.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
-
-
-        [HttpGet("Category/{categoryId}")]
-        public async Task<IActionResult> GetProductsByCategory(int categoryId)
+        /// <summary>
+        /// Gets a list of products based on the specified category ID.
+        /// </summary>
+        /// <param name="CategoryId">The ID of the category.</param>
+        /// <returns>Returns a response with a list of ProductDTO or an error message.</returns>
+        [HttpGet("Category/{CategoryId}")]
+        public async Task<IActionResult> GetProductsByCategory(int CategoryId)
         {
             ResponseApi<List<ProductDTO>> _response = new ResponseApi<List<ProductDTO>>();
             try
             {
-                List<Product> productList = await _productService.GetProductsByCategory(categoryId);
+                List<Product> productList = await _productService.GetProductsByCategory(CategoryId);
 
                 if (productList != null && productList.Any())
                 {
@@ -78,14 +85,19 @@ namespace Backend.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
-
-        [HttpGet("Category/{categoryId}/SubCategory/{subCategoryId}")]
-        public async Task<IActionResult> GetProductsByCategoryAndSubCategory(int categoryId, int subCategoryId)
+        /// <summary>
+        /// Gets a list of products based on the specified category and subcategory IDs.
+        /// </summary>
+        /// <param name="CategoryId">The ID of the category.</param>
+        /// <param name="SubCategoryId">The ID of the subcategory.</param>
+        /// <returns>Returns a response with a list of ProductDTO or an error message.</returns>
+        [HttpGet("Category/{CategoryId}/SubCategory/{SubCategoryId}")]
+        public async Task<IActionResult> GetProductsByCategoryAndSubCategory(int CategoryId, int SubCategoryId)
         {
             ResponseApi<List<ProductDTO>> _response = new ResponseApi<List<ProductDTO>>();
             try
             {
-                List<Product> productList = await _productService.GetProductsByCategoryAndSubCategory(categoryId, subCategoryId);
+                List<Product> productList = await _productService.GetProductsByCategoryAndSubCategory(CategoryId, SubCategoryId);
 
                 if (productList != null && productList.Any())
                 {
@@ -109,7 +121,11 @@ namespace Backend.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
-
+        /// <summary>
+        /// Gets a specific product based on the provided product ID.
+        /// </summary>
+        /// <param name="ProductId">The ID of the product.</param>
+        /// <returns>Returns a response with a ProductDTO or an error message.</returns>
         [HttpGet("{ProductId}")]
         public async Task<IActionResult> Get(int ProductId)
         {
@@ -118,7 +134,7 @@ namespace Backend.Controllers
             {
                 Product _producFound = await _productService.Get(ProductId);
 
-                if (_producFound != null && _producFound.ProductId != 0)
+                if (_producFound != null && _producFound.Id != 0)
                 {
                     _response = new ResponseApi<ProductDTO>
                     {
@@ -136,79 +152,6 @@ namespace Backend.Controllers
             catch (Exception ex)
             {
                 _response = new ResponseApi<ProductDTO> { Status = false, Msg = ex.Message };
-                return StatusCode(StatusCodes.Status500InternalServerError, _response);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Post(ProductDTO request)
-        {
-            ResponseApi<ProductDTO> _response = new ResponseApi<ProductDTO>();
-
-            try
-            {
-                Product _model = _mapper.Map<Product>(request);
-                Product _productCreate = await _productService.Add(_model);
-
-                if (_productCreate.ProductId != 0)
-                {
-                    _response = new ResponseApi<ProductDTO>
-                    {
-                        Status = true,
-                        Msg = "OK",
-                        Value = _mapper.Map<ProductDTO>(_productCreate)
-                    };
-                }
-                else
-                    _response = new ResponseApi<ProductDTO> { Status = false, Msg = "Could not create record" };
-                return StatusCode(StatusCodes.Status200OK, _response);
-            }
-            catch (Exception ex)
-            {
-                _response = new ResponseApi<ProductDTO> { Status = false, Msg = ex.Message };
-                return StatusCode(StatusCodes.Status500InternalServerError, _response);
-            }
-        }
-        [HttpPut]
-        public async Task<IActionResult> Put(ProductDTO request)
-        {
-            ResponseApi<ProductDTO> _response = new ResponseApi<ProductDTO>();
-            try
-            {
-                Product _model = _mapper.Map<Product>(request);
-                Product _productEdited = await _productService.Update(_model);
-                _response = new ResponseApi<ProductDTO>()
-                {
-                    Status = true,
-                    Msg = "Ok",
-                    Value = _mapper.Map<ProductDTO>(_productEdited)
-                };
-                return StatusCode(StatusCodes.Status200OK, _response);
-            }
-            catch (Exception ex)
-            {
-                _response = new ResponseApi<ProductDTO> { Status = false, Msg = ex.Message };
-                return StatusCode(StatusCodes.Status500InternalServerError, _response);
-            }
-        }
-
-        [HttpDelete("{ProductId}")]
-        public async Task<IActionResult> Delete(int ProductId)
-        {
-            ResponseApi<bool> _response = new ResponseApi<bool>();
-            try
-            {
-                Product _productFound = await _productService.Get(ProductId);
-                bool deleted = await _productService.Delete(_productFound);
-                if (deleted)
-                    _response = new ResponseApi<bool> { Status = true, Msg = "OK" };
-                else
-                    _response = new ResponseApi<bool> { Status = false, Msg = "Product could not be disabled" };
-                return StatusCode(StatusCodes.Status200OK, _response);
-            }
-            catch (Exception ex)
-            {
-                _response = new ResponseApi<bool> { Status = false, Msg = ex.Message };
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }

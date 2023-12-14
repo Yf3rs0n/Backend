@@ -1,33 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Backend.Models;
+﻿namespace Backend.Models;
 
 public partial class Product
 {
-    public int ProductId { get; set; }
+    public int Id { get; set; }
 
-    public string ProductName { get; set; } = null!;
+    public string? Name { get; set; }
 
     public string? Description { get; set; }
 
-    public double Price { get; set; }
+    public decimal? Price { get; set; }
 
-    public int Stock { get; set; }
+    public string? Img { get; set; }
 
     public int? CategoryId { get; set; }
 
     public int? SubCategoryId { get; set; }
 
-    public string? Image { get; set; }
-
-    public string Size { get; set; } = null!;
-
-    public string Color { get; set; } = null!;
-
-    public string Activity { get; set; } = null!;
+    public bool? State { get; set; }
 
     public virtual Category? Category { get; set; }
 
+    public virtual ICollection<ProductsVariant> ProductsVariants { get; set; } = new List<ProductsVariant>();
+
     public virtual SubCategory? SubCategory { get; set; }
+
 }

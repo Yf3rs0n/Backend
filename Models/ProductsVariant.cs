@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Backend.Models;
+
+public partial class ProductsVariant
+{
+    public int Id { get; set; }
+
+    public string? Size { get; set; }
+
+    public string? Color { get; set; }
+
+    public int? PurchasesDetailsId { get; set; }
+
+    public int? ProductsId { get; set; }
+
+    public virtual Product? Products { get; set; }
+
+    public virtual PurchasesDetail? PurchasesDetails { get; set; }
+}
