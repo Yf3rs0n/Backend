@@ -18,13 +18,14 @@ namespace Backend.Utilities
                 .ForMember(destiny => destiny.Img, opt => opt.MapFrom(source => source.Img))
                 .ForMember(destiny => destiny.CategoryId, opt => opt.MapFrom(source => source.CategoryId))
                 .ForMember(destiny => destiny.SubCategoryId, opt => opt.MapFrom(source => source.SubCategoryId))
-                
+
                 ;
             #endregion
             #region ProductsVariant
             CreateMap<ProductsVariant, ProductsVariantDTO>().ReverseMap()
             .ForMember(destiny => destiny.Size, opt => opt.MapFrom(source => source.Size))
             .ForMember(destiny => destiny.Color, opt => opt.MapFrom(source => source.Color))
+            .ForMember(destiny => destiny.Quantity, opt => opt.MapFrom(source => source.Quantity))
             .ForMember(destiny => destiny.ProductId, opt => opt.MapFrom(source => source.ProductId))
 
             ;
@@ -33,7 +34,7 @@ namespace Backend.Utilities
             CreateMap<PurchasesDetail, PurchaseDetailDTO>().ReverseMap()
             .ForMember(destiny => destiny.ProductQuantity, opt => opt.MapFrom(source => source.ProductQuantity))
             .ForMember(destiny => destiny.ProductTotal, opt => opt.MapFrom(source => source.ProductTotal))
-            .ForMember(destiny => destiny.ProductsVariants,  opt => opt.MapFrom(source => source.ProductsVariants))
+            .ForMember(destiny => destiny.ProductsVariants, opt => opt.MapFrom(source => source.ProductsVariants))
             ;
             #endregion
             #region Purchase
@@ -47,7 +48,12 @@ namespace Backend.Utilities
                 .ForMember(destiny => destiny.PostalCode, opt => opt.MapFrom(source => source.PostalCode))
                 .ForMember(destiny => destiny.PurchasesDetails, opt => opt.MapFrom(source => source.PurchasesDetails));
             #endregion
-
+            #region ContactForm
+            CreateMap<ContactForm, ContactFormDTO>().ReverseMap()
+                .ForMember(destiny => destiny.Name, opt => opt.MapFrom(source => source.Name))
+                .ForMember(destiny => destiny.Email, opt => opt.MapFrom(source => source.Email))
+                .ForMember(destiny => destiny.Msg, opt => opt.MapFrom(source => source.Msg));
+            #endregion
         }
     }
 }
